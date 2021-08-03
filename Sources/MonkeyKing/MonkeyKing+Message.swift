@@ -28,7 +28,7 @@ extension MonkeyKing {
         case miniApp(url: URL, path: String, withShareTicket: Bool, type: MiniAppType, userName: String?)
     }
 
-    public typealias Info = (title: String?, description: String?, thumbnail: UIImage?, media: Media?)
+    public typealias Info = (title: String?, description: String?, thumbnail: UIImage?, media: Media?, shareType: Int?)
 
     public enum Message {
 
@@ -316,7 +316,9 @@ extension MonkeyKing {
             qqSchemeURLString += "&version=1&cflag=\(type.scene)"
             qqSchemeURLString += "&callback_type=scheme&generalpastboard=1"
             qqSchemeURLString += "&callback_name=\(callbackName)"
-            qqSchemeURLString += "&src_type=app&shareType=0&file_type="
+            // shareType = 1 for share to qzone directly
+            let shareType = type.info.shareType ?? 0
+            qqSchemeURLString += "&src_type=app&shareType=\(shareType)&file_type="
             if let media = type.info.media {
                 func handleNews(with url: URL, mediaType: String?) {
                     if let thumbnailData = type.info.thumbnail?.monkeyking_compressedImageData {
