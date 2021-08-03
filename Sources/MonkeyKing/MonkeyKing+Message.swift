@@ -28,7 +28,7 @@ extension MonkeyKing {
         case miniApp(url: URL, path: String, withShareTicket: Bool, type: MiniAppType, userName: String?)
     }
 
-    public typealias Info = (title: String?, description: String?, thumbnail: UIImage?, media: Media?, shareType: Int?)
+    public typealias Info = (title: String?, description: String?, thumbnail: UIImage?, media: Media?)
 
     public enum Message {
 
@@ -195,7 +195,8 @@ extension MonkeyKing {
         }
     }
 
-    public class func deliver(_ message: Message, completionHandler: @escaping DeliverCompletionHandler) {
+    /// shareType = 1 for share to qzone directly
+    public class func deliver(_ message: Message, shareType: Int = 0, completionHandler: @escaping DeliverCompletionHandler) {
         guard message.canBeDelivered else {
             completionHandler(.failure(.noApp))
             return
@@ -317,7 +318,6 @@ extension MonkeyKing {
             qqSchemeURLString += "&callback_type=scheme&generalpastboard=1"
             qqSchemeURLString += "&callback_name=\(callbackName)"
             // shareType = 1 for share to qzone directly
-            let shareType = type.info.shareType ?? 0
             qqSchemeURLString += "&src_type=app&shareType=\(shareType)&file_type="
             if let media = type.info.media {
                 func handleNews(with url: URL, mediaType: String?) {
