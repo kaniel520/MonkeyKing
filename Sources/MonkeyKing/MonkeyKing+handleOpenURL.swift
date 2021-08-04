@@ -272,7 +272,14 @@ extension MonkeyKing {
         }
 
         // OAuth is the only leftover
-        guard let result = info["ret"] as? Int, result == 0 else {
+        var ret: String?
+        if let result = info["ret"] as? Int {
+            ret = String(result)
+        } else if let result = info["ret"] as? String {
+            // when qq is auth from qrcode login, then the ret is String type
+            ret = result
+        }
+        guard let result = ret, result == "0" else {
             let error: Error
             if let errorDomatin = info["user_cancelled"] as? String, errorDomatin.uppercased() == "YES" {
                 error = .userCancelled
