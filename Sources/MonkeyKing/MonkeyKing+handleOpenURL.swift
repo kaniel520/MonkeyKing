@@ -138,6 +138,9 @@ extension MonkeyKing {
                 ? .userCancelled
                 : .sdk(.other(code: result))
             shared.oauthCompletionHandler?(.failure(error))
+            if resultCode == -4 {
+                shared.oauthFromWeChatCodeCompletionHandler?(.failure(.userCancelled))
+            }
             return false
         }
 
